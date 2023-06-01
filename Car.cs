@@ -1,13 +1,10 @@
 public class Car : Vehicle
 {
-    protected string m_CarColor;
+    protected string m_CarColor = "";
     protected int m_DoorsAmount;
 
-    public override List<string> AdditionalFields()
+    public Car() : base()
     {
-        List<string> additionalFields = new List<string>();
-        additionalFields.Add("Color");
-
-        return additionalFields;
+        m_VehicleFields.Add("Color");
     }
 }
