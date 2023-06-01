@@ -39,6 +39,12 @@
         set { m_FuelType = value; }
     }
 
+    public List<Wheel> Wheels
+    {
+        get { return r_Wheels; }
+        set { r_Wheels = value; }
+    }
+
     public List<string> Fields
     {
         get { return m_VehicleFields; }
