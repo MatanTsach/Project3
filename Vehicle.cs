@@ -3,16 +3,16 @@
     protected string r_ModelName = "";
     protected string r_LicenseNumber = "";
     protected float m_EnergyPercentage;
-    protected eFuelType m_FuelType;
-    protected List<Wheel> r_Wheels = new List<Wheel>();
-
+    protected eEnergySource m_FuelType;
+    protected List<Wheel> r_Wheels;
+    protected VehicleFactory.eVehicleType vehicleType;
     protected List<string> m_VehicleFields;
 
     public Vehicle()
     {
+        r_Wheels = new List<Wheel>();
         m_VehicleFields = new List<string>();
         m_VehicleFields.Add("Model Name");
-        m_VehicleFields.Add("License Number");
     }
 
     public string ModelName
@@ -21,7 +21,7 @@
         set { r_ModelName = value; }
     }
 
-    public string Licensenumber
+    public string LicenseNumber
     {
         get { return r_LicenseNumber; }
         set { r_LicenseNumber = value; }
@@ -33,7 +33,7 @@
         set { m_EnergyPercentage = value; }
     }
 
-    public eFuelType FuelType
+    public eEnergySource FuelType
     {
         get { return m_FuelType; }
         set { m_FuelType = value; }
@@ -49,4 +49,6 @@
     {
         get { return m_VehicleFields; }
     }
+
+    public 
 }
