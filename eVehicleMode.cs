@@ -2,5 +2,5 @@ public enum eVehicleMode
 {
     Repair,
     Fixed,
-    None
+    Paid
 }

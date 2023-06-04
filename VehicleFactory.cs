@@ -5,12 +5,14 @@ public class VehicleFactory
         Gas_Car,
         Electric_Car,
         Gas_Motorcycle,
-        Electric_Motorcyle,
+        Electric_Motorcycle,
         Truck
     }
 
-    public static T makeVehicle<T>(string i_LicenseNumber, string i_ModelType)
+    public static Vehicle makeVehicle(string i_LicenseNumber, eVehicleType i_VehicleType)
     {
-        return Activator.CreateInstance(Type.GetType())
+        Type type = Type.GetType(i_VehicleType.ToString().Replace("_",""));
+        
+        return (Vehicle)Activator.CreateInstance(type, i_LicenseNumber);
     }
 }

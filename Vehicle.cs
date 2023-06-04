@@ -5,14 +5,14 @@
     protected float m_EnergyPercentage;
     protected eEnergySource m_FuelType;
     protected List<Wheel> r_Wheels;
-    protected VehicleFactory.eVehicleType vehicleType;
-    protected List<string> m_VehicleFields;
+    protected readonly Tank r_Tank;
+    protected List<string> m_VehicleProperties;
 
     public Vehicle()
     {
         r_Wheels = new List<Wheel>();
-        m_VehicleFields = new List<string>();
-        m_VehicleFields.Add("Model Name");
+        m_VehicleProperties = new List<string>();
+        m_VehicleProperties.Add("Model Name");
     }
 
     public string ModelName
@@ -45,10 +45,22 @@
         set { r_Wheels = value; }
     }
 
-    public List<string> Fields
+    public List<string> VehicleProperties
     {
-        get { return m_VehicleFields; }
+        get { return m_VehicleProperties; }
     }
 
-    public 
+    public void UpdateAllWheels(string i_ManufacturerName, float i_AirPressure)
+    {
+        for (int i = 0; i < r_Wheels.Count; i++)
+        {
+            UpdateWheel(i, i_ManufacturerName, i_AirPressure);
+        }
+    }
+
+    public void UpdateWheel(int i_WheelIndex, string i_ManufacturerName, float i_AirPressure)
+    {
+        r_Wheels.ElementAt(i_WheelIndex).ManufacturerName = i_ManufacturerName;
+        r_Wheels.ElementAt(i_WheelIndex).Inflate(i_AirPressure);
+    }
 }

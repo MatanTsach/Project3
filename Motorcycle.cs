@@ -1,3 +1,4 @@
+/*
 public class Motorcycle : Vehicle 
 {
     protected eLicenseType m_LicenseType;
@@ -40,3 +41,4 @@ public class Motorcycle : Vehicle
         return isFualed;
     }
 }
+*/

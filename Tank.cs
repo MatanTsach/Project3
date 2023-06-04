@@ -21,14 +21,14 @@ public class Tank
     }
 
     public bool AddToEnergyResource(float i_EnergyToAdd)
+    {
+        bool isFueled = false;
+        if(i_EnergyToAdd + CurrentCapacity <= MaxCapacity)
         {
-            bool isFualed = false;
-            if(i_EnergyToAdd + CurrentCapacity <= MaxCapacity)
-            {
-                this.CurrentCapacity += i_EnergyToAdd;
-                isFualed = true;
-            }
-            
-            return isFualed;
+            this.CurrentCapacity += i_EnergyToAdd;
+            isFueled = true;
         }
+        
+        return isFueled;
+    }
 }

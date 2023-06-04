@@ -10,24 +10,33 @@ public class Commands
     {
         string licenseNumber;
 
-        Console.Write("> Please enter license number: ");
+        Console.WriteLine("> Please enter license number: ");
         licenseNumber = Console.ReadLine();
         if(r_Garage.ContainsVehicle(licenseNumber))
         {   
-            Console.WriteLine("Vehicle exists in garage registry, moving to 'repair' mode.");
+            Console.WriteLine("Vehicle exists in garage registry, moving to Repair mode.");
             r_Garage.ChangeMode(licenseNumber, eVehicleMode.Repair);
         }
         else
         {
-            
-            VehicleFactory.eVehicleType vehicleType = requestVehicleType();
+            Vehicle newVehicle;
 
+            while (true)
+            {
+                try
+                {
+                    VehicleFactory.eVehicleType vehicleType = requestVehicleType();
+                    newVehicle = VehicleFactory.makeVehicle(licenseNumber, vehicleType);
+                    requestWheelsData(newVehicle);
+                    break;
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+            }
             
-            Vehicle newVehicle = VehicleFactory.createVehicle(licenseNumber, vehicleType);
-            requestWheelsData(newVehicle);
-            List<string> fields = newVehicle.Fields;
-
-            foreach(string field in fields)
+            foreach (string property in newVehicle.VehicleProperties)
             {
                 while(true)
                 {
@@ -35,9 +44,10 @@ public class Commands
                     {
                         Console.Write($"Please enter {property}: ");
                         newVehicle.GetType().GetProperty(property).SetValue(property, Console.ReadLine());
+                        break;
                     } catch(Exception e)
                     {
-                        Console.WriteLine(e);
+                        Console.WriteLine(e.ToString());
                     }
                 }
             }
@@ -53,38 +63,51 @@ public class Commands
         Console.WriteLine($"Please enter vehicle type. Available types: {vehicleSelection}");
         string selection = Console.ReadLine();
 
+        VehicleFactory.eVehicleType vehicleType;
+        if(Enum.TryParse(selection.Replace(" ", "_"), out vehicleType))
+        {
+            return vehicleType;
+        }
 
-
+        throw new ArgumentException("Vehicle type does not exist.");
     }    
 
     private void requestWheelsData(Vehicle i_Vehicle)
     {
+        string wheelModel;
+        float wheelPressure;
         Console.WriteLine("Would you like to insert wheels data for all wheels? type Y for Yes and any other key for No");
         string input = Console.ReadLine();
         if (input == "Y")
         {
-            i_Vehicle.UpdateAllWheels(getWheelInfo());
+            (wheelModel, wheelPressure) = getWheelInfo();
+            i_Vehicle.UpdateAllWheels(wheelModel, wheelPressure);
         }
         else
         {
+            
             for (int i = 0; i < i_Vehicle.Wheels.Count; i++)
             {
                 Console.WriteLine($"Insert data for wheel {i}");
-                i_Vehicle.UpdateWheel(i, getWheelInfo());
+                (wheelModel, wheelPressure) = getWheelInfo();
+                i_Vehicle.UpdateWheel(i, wheelModel, wheelPressure);
             }
         }
     }
 
-    private (string, int) getWheelInfo()
+    private (string, float) getWheelInfo()
     {
         string wheelModelType;
-        int wheelMaxPressure;
+        float wheelPressure;
 
-        Console.Write("> Insert model type: ");
+        Console.WriteLine("> Insert model type: ");
         wheelModelType = Console.ReadLine();
-        Console.Write("> Insert max pressure: ");
-        wheelMaxPressure = int.Parse(Console.ReadLine()); // will throws Format exception in case of non integer.
+        Console.WriteLine("> Insert pressure: ");
+        if(float.TryParse(Console.ReadLine(), out wheelPressure))
+        {
+            return (wheelModelType, wheelPressure);
+        }
         
-        return (wheelModelType, wheelMaxPressure);
+        throw new FormatException("Incorrect pressure format.");
     }
 }
