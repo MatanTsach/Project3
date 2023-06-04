@@ -25,12 +25,21 @@ public class Commands
             
             Vehicle newVehicle = VehicleFactory.createVehicle(licenseNumber, vehicleType);
             requestWheelsData(newVehicle);
-            List<string> additionalProperties = newVehicle.additionalProperties;
+            List<string> fields = newVehicle.Fields;
 
-            foreach(string property in additionalProperties)
+            foreach(string field in fields)
             {
-                Console.Write($"{property}: ");
-                newVehicle.GetType().GetProperty(property).SetValue(property, Console.ReadLine());
+                while(true)
+                {
+                    try
+                    {
+                        Console.Write($"Please enter {property}: ");
+                        newVehicle.GetType().GetProperty(property).SetValue(property, Console.ReadLine());
+                    } catch(Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
+                }
             }
 
             r_Garage.AddVehicle(newVehicle);
