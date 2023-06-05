@@ -1,19 +1,15 @@
-/*
-public class Motorcycle : Vehicle 
+public class Motorcycle : Vehicle
 {
     protected eLicenseType m_LicenseType;
     protected int m_EngineVolume;
-    protected Tank m_Tank = new Tank(6.4f);
-
-    public Motorcycle() : base()
+    private const float c_WheelMaxPressure = 31;
+    public Motorcycle(string i_LicenseNumber) : base(i_LicenseNumber)
     {
-        FuelType = eEnergySource.Gas_Octan98;
-        Wheels = NewObjects.NewWheelsList(2,31);
-        m_VehicleFields.Add("License Type");
-        m_VehicleFields.Add("Engine Volume");
-        m_VehicleFields.Add("Max Tank Liters");
-        m_VehicleFields.Add("Tank Liters Left");
-        EnergyPercentage = Tank.CurrentCapacity / Tank.MaxCapacity;
+        m_AmountOfWheels = 2;
+        CreateWheels(c_WheelMaxPressure);
+        r_Tank = new Tank(6.4f, eEnergySource.Gas_Octan98); 
+        m_VehicleProperties["LicenseType"] = "License Type";
+        m_VehicleProperties["EngineVolume"] = "Engine Volume";
     }
 
     public eLicenseType LicenseType
@@ -28,17 +24,8 @@ public class Motorcycle : Vehicle
         set { m_EngineVolume = value; }
     }
 
-    public Tank Tank
+    public void FillTank(float i_Amount)
     {
-        get { return m_Tank; }
-        set { m_Tank = value; }
-    }
-
-    public bool Charge(float i_EnergyToAdd) {
-        bool isFualed = Tank.AddToEnergyResource(i_EnergyToAdd);
-        EnergyPercentage = Tank.CurrentCapacity / Tank.MaxCapacity;
-
-        return isFualed;
+        base.FillTank(i_Amount, eEnergySource.Gas_Octan98);
     }
 }
-*/

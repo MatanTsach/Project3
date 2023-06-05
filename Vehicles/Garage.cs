@@ -19,5 +19,15 @@ public class Garage
         r_Vehicles[i_Vehicle.LicenseNumber] = i_Vehicle;
         r_VehicleModes[i_Vehicle.LicenseNumber] = eVehicleMode.Repair;
     }
+
+    public Dictionary<string, Vehicle> Vehicles
+    {
+        get { return r_Vehicles; }
+    }
+
+    public Dictionary<string, eVehicleMode> VehicleModes
+    {
+        get { return r_VehicleModes; }
+    }
     
 }

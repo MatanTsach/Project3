@@ -22,12 +22,12 @@ public class Tank
 
     public eEnergySource EnergySource
     {
-        get { return EnergySource; }
+        get { return r_EnergySource; }
     }
 
     public void Fill(float i_Amount)
     {
-        if ((m_CurrentCapacity + i_Amount) > r_MaxCapacity)
+        if ((m_CurrentCapacity + i_Amount) <= r_MaxCapacity)
         {
             m_CurrentCapacity += i_Amount;
         }

@@ -43,21 +43,26 @@ public class ConsoleUI
         {
             throw new FormatException();
         }
-
+        
         switch (choice)
         {
             case 1:
                 r_Commands.GarageEntry();
                 break;
             case 2:
+                r_Commands.DisplayVehicles();
                 break;
             case 3:
+                r_Commands.ChangeVehicleMode();
                 break;
             case 4:
+                r_Commands.InflateToMax();
                 break;
             case 5:
+                r_Commands.handleFuelOrCharge("Gas");
                 break;
             case 6:
+                r_Commands.handleFuelOrCharge("Electric");
                 break;
             case 7:
                 break;

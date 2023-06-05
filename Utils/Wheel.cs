@@ -15,6 +15,16 @@ public class Wheel
         get { return m_ManufacturerName; }
         set { m_ManufacturerName = value; }
     }
+
+    public float AirPressure
+    {
+        get { return m_AirPressure; }
+    }
+
+    public float MaxAirPressure
+    {
+        get { return m_MaxAirPressure; }
+    }
     
     public void Inflate(float i_AirToAdd)
     {

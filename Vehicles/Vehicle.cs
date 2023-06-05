@@ -3,10 +3,9 @@
     protected string r_ModelName = "";
     protected string r_LicenseNumber = "";
     protected float m_EnergyPercentage;
-    protected eEnergySource m_FuelType;
-    protected List<Wheel> r_Wheels; // add field for amount of wheels
+    protected List<Wheel> r_Wheels; 
     protected int m_AmountOfWheels;
-    protected readonly Tank r_Tank;
+    protected Tank r_Tank;
     protected Dictionary<string, string> m_VehicleProperties;
 
     public Vehicle(string i_LicenseNumber)
@@ -34,12 +33,6 @@
     {
         get { return m_EnergyPercentage; }
         set { m_EnergyPercentage = value; }
-    }
-
-    public eEnergySource FuelType
-    {
-        get { return m_FuelType; }
-        set { m_FuelType = value; }
     }
 
     public List<Wheel> Wheels
