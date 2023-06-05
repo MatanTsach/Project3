@@ -13,7 +13,7 @@ public class ConsoleUI
     private void showMenu()
     {
         StringBuilder sb = new StringBuilder();
-        sb.Append("------- MENU -------\n");
+        sb.Append("\n\n------- MENU -------\n");
         sb.Append("1. Add a new vehicle\n");
         sb.Append("2. Display vehicles in the garage\n");
         sb.Append("3. Change vehicle status\n");
@@ -29,6 +29,7 @@ public class ConsoleUI
         while (true)
         {
             showMenu();
+            Console.Write("Please write your desired menu item: ");
             string userInput = Console.ReadLine();
             handleInput(userInput);
         }

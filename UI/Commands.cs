@@ -1,3 +1,5 @@
+using System.Reflection;
+
 public class Commands
 {
     private readonly Garage r_Garage;
@@ -10,7 +12,7 @@ public class Commands
     {
         string licenseNumber;
 
-        Console.WriteLine("> Please enter license number: ");
+        Console.Write("Please enter license number: ");
         licenseNumber = Console.ReadLine();
         if(r_Garage.ContainsVehicle(licenseNumber))
         {   
@@ -25,29 +27,32 @@ public class Commands
             {
                 try
                 {
-                    VehicleFactory.eVehicleType vehicleType = requestVehicleType();
-                    newVehicle = VehicleFactory.makeVehicle(licenseNumber, vehicleType);
+                    string vehicleType = requestVehicleType();
+                    newVehicle = VehicleFactory.makeVehicle(licenseNumber, vehicleType.Replace(" ", ""));
                     requestWheelsData(newVehicle);
                     break;
                 }
                 catch(Exception e)
                 {
-                    Console.WriteLine(e.ToString());
+                    Console.WriteLine(e.Message);
                 }
             }
             
-            foreach (string property in newVehicle.VehicleProperties)
+            foreach (string property in newVehicle.VehicleProperties.Keys)
             {
                 while(true)
                 {
                     try
                     {
-                        Console.Write($"Please enter {property}: ");
-                        newVehicle.GetType().GetProperty(property).SetValue(property, Console.ReadLine());
+                        Console.Write($"Please enter {newVehicle.VehicleProperties[property]}: ");
+                        string input = Console.ReadLine();
+
+                        PropertyInfo propertyInfo = newVehicle.GetType().GetProperty(property);
+                        propertyInfo.SetValue(newVehicle, Convert.ChangeType(input, propertyInfo.PropertyType));
                         break;
-                    } catch(Exception e)
+                    } catch (Exception)
                     {
-                        Console.WriteLine(e.ToString());
+                        Console.WriteLine("Invalid input for field, try again.");
                     }
                 }
             }
@@ -57,16 +62,15 @@ public class Commands
         }
     }
 
-    private VehicleFactory.eVehicleType requestVehicleType()
+    private string requestVehicleType()
     {
-        string vehicleSelection = string.Join(",", Enum.GetNames(typeof(VehicleFactory.eVehicleType))).Replace("_", " ");
-        Console.WriteLine($"Please enter vehicle type. Available types: {vehicleSelection}");
+        string vehicleSelection = string.Join(", ", VehicleFactory.VehicleTypes);
+        Console.Write($"Please enter vehicle type (Available types: {vehicleSelection}): ");
         string selection = Console.ReadLine();
 
-        VehicleFactory.eVehicleType vehicleType;
-        if(Enum.TryParse(selection.Replace(" ", "_"), out vehicleType))
+        if (VehicleFactory.VehicleTypes.Contains(selection))
         {
-            return vehicleType;
+            return selection;
         }
 
         throw new ArgumentException("Vehicle type does not exist.");
@@ -76,22 +80,25 @@ public class Commands
     {
         string wheelModel;
         float wheelPressure;
-        Console.WriteLine("Would you like to insert wheels data for all wheels? type Y for Yes and any other key for No");
+        Console.Write("Would you like to insert wheels data for all wheels(Y/N)? ");
         string input = Console.ReadLine();
         if (input == "Y")
         {
             (wheelModel, wheelPressure) = getWheelInfo();
             i_Vehicle.UpdateAllWheels(wheelModel, wheelPressure);
         }
-        else
+        else if (input == "N")
         {
-            
             for (int i = 0; i < i_Vehicle.Wheels.Count; i++)
             {
-                Console.WriteLine($"Insert data for wheel {i}");
+                Console.WriteLine($"Insert data for wheel {i+1}");
                 (wheelModel, wheelPressure) = getWheelInfo();
                 i_Vehicle.UpdateWheel(i, wheelModel, wheelPressure);
             }
+        }
+        else
+        {
+            throw new ArgumentException("Please enter Y or N.");
         }
     }
 
@@ -100,9 +107,9 @@ public class Commands
         string wheelModelType;
         float wheelPressure;
 
-        Console.WriteLine("> Insert model type: ");
+        Console.Write("Insert model type: ");
         wheelModelType = Console.ReadLine();
-        Console.WriteLine("> Insert pressure: ");
+        Console.Write("Insert pressure: ");
         if(float.TryParse(Console.ReadLine(), out wheelPressure))
         {
             return (wheelModelType, wheelPressure);

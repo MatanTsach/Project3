@@ -1,6 +1,6 @@
 public class Wheel 
 {
-    private string m_ManufacturerName;
+    private string m_ManufacturerName = "";
     private float m_AirPressure;
     private float m_MaxAirPressure;
     
