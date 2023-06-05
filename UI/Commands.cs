@@ -124,24 +124,42 @@ public class Commands
         sb.Append("Which vehicles would you like to display ?\n");
         sb.Append("Please insert mode:\n");
         sb.Append("1. All vehicles\n");
-        sb.Append("2. Repair\n");
-        sb.Append("3. Fixed\n");
-        sb.Append("4. Paid\n");
+
+        int index = 2;
+        int choice;
+        eVehicleMode[] modes = (eVehicleMode[])Enum.GetValues(typeof(eVehicleMode));
+
+        foreach (eVehicleMode mode in modes)
+        {
+           sb.Append($"{index}. {mode} \n");
+           index++;
+        }
         Console.WriteLine(sb.ToString());
 
         while (true)
         {
             string i_UserInput = Console.ReadLine();
-            int choice;
 
             if(!int.TryParse(i_UserInput, out choice))
             {
                 throw new FormatException();
             }
 
-            if(choice >= 1 && choice <=4)
+            if(choice >= 1 && choice <= modes.Length + 1)
             {
-                DisplayVehiclesByFilter(choice);
+                if(choice == 1)
+                {
+                    foreach (string licenseNumber in r_Garage.Vehicles.Keys)
+                    {
+                        Console.WriteLine(licenseNumber);
+                    }
+                    
+                }
+                else
+                {
+                    eVehicleMode selectedMode = modes[choice-2];
+                    DisplayVehiclesByFilter(selectedMode);
+                }
                 break;
             }
             else
@@ -151,40 +169,19 @@ public class Commands
         }
     }
 
-    public void DisplayVehiclesByFilter(int i_Filter)
+    public void DisplayVehiclesByFilter(eVehicleMode selectedMode)
     {
-        if(i_Filter == 1)
-        {
-            Console.WriteLine("All the vehicles in the garage:");
-            foreach (string licenseNumber in r_Garage.Vehicles.Keys)
-            {
-                Console.WriteLine(licenseNumber);
-            }
-        }
-        else
-        {
-            eVehicleMode filter= eVehicleMode.Repair;
-
-            switch (i_Filter)
-            {
-                case 3:
-                    filter = eVehicleMode.Fixed;
-                    break;
-                case 4:
-                    filter = eVehicleMode.Paid;
-                    break;
-            }
-            Console.WriteLine("All the vehicles in " + filter + " mode in the garage:");
+            Console.WriteLine("All the vehicles in " + selectedMode + " mode in the garage:");
 
             foreach (string licenseNumber in r_Garage.VehicleModes.Keys)
             {
                 eVehicleMode vehicleMode = r_Garage.VehicleModes[licenseNumber];
-                if(vehicleMode == filter)
+                if(vehicleMode == selectedMode)
                 {
                     Console.WriteLine(licenseNumber);
                 }
             }
-        }
+        
     }
 
     public void ChangeVehicleMode()
@@ -204,48 +201,48 @@ public class Commands
                 break;
             }
         }
+
         eVehicleMode currentMode = r_Garage.VehicleModes[licenseNumber];
         StringBuilder sb = new StringBuilder();
-        sb.Append("The vehicle " + licenseNumber + " is in " + currentMode + " mode\n");
+        sb.Append($"The vehicle {licenseNumber} is in {currentMode} mode\n");
         sb.Append("Which mode would you like to change to ?\n");
         sb.Append("Please insert mode:\n");
-        sb.Append("1. Repair\n");
-        sb.Append("2. Fixed\n");
-        sb.Append("3. Paid\n");
+
+        int index = 1;
+        int choice;
+        eVehicleMode[] modes = (eVehicleMode[])Enum.GetValues(typeof(eVehicleMode));
+
+        foreach (eVehicleMode mode in modes)
+        {
+           sb.Append($"{index}. {mode} \n");
+           index++;
+        }
         Console.WriteLine(sb.ToString());
 
         while (true)
         {
             string i_UserInput = Console.ReadLine();
-            int choice;
-
+            
             if(!int.TryParse(i_UserInput, out choice))
             {
                 throw new FormatException();
             }
-
-            if(choice >= 1 && choice <=3)
-            {
-                eVehicleMode mode= eVehicleMode.Repair;
-
-                switch (choice)
-                {
-                    case 2:
-                        mode = eVehicleMode.Fixed;
-                        break;
-                    case 3:
-                        mode = eVehicleMode.Paid;
-                        break;
-                }
-                r_Garage.ChangeMode(licenseNumber,mode);
-                Console.WriteLine("The vehicle " + licenseNumber + " mode changed to " + r_Garage.VehicleModes[licenseNumber]);
-                break;
-            }
             else
             {
-            Console.WriteLine("Not on the menu! please enter a correct menu item.");
+                if(choice >= 1 && choice <= modes.Length)
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Not on the menu! please enter a correct menu item.");
+
+                }
             }
         }
+        eVehicleMode selectedMode = modes[choice-1];
+        r_Garage.ChangeMode(licenseNumber, selectedMode);
+        Console.WriteLine($"Vehicle number {licenseNumber} mode has changed to {selectedMode}");
 
     }
 
@@ -274,11 +271,9 @@ public class Commands
         Console.Write("Wheels inflated!");
     }
 
-    public void handleFuelOrCharge(string i_VehicleType)
+    public void handleFuel()
     {
         string licenseNumber;
-        eEnergySource fuelType= eEnergySource.Gas_Octan95;
-        int amout = 0;
 
         Console.Write("Please enter license number: ");
         while(true)
@@ -294,38 +289,34 @@ public class Commands
             }
         }
 
-        if(i_VehicleType == "Gas")
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.Append("Choose a fuel type:\n");
-            sb.Append("1. Gas_Octan95\n");
-            sb.Append("2. Gas_Octan98\n");
-            sb.Append("3. Gas_Soler\n");
-            Console.WriteLine(sb.ToString());
+        
+        StringBuilder sb = new StringBuilder();
+        sb.Append("Chosse a fuel type ?\n");
 
+        int index = 1;
+        int choice;
+        eEnergySource[] fuelTypes = (eEnergySource[])Enum.GetValues(typeof(eEnergySource));
+
+        foreach (eEnergySource type in fuelTypes)
+        {
+           sb.Append($"{index}. {type} \n");
+           index++;
+        }
+        Console.WriteLine(sb.ToString());
+
+        eEnergySource fuelTypeToAdd;
             while (true)
             {
                 string i_UserInput = Console.ReadLine();
-                int choice;
 
                 if(!int.TryParse(i_UserInput, out choice))
                 {
                     throw new FormatException();
                 }
 
-                if(choice >= 1 && choice <=3)
+                if(choice >= 1 && choice <= fuelTypes.Length)
                 {
-                    
-
-                    switch (choice)
-                    {
-                        case 2:
-                            fuelType = eEnergySource.Gas_Octan98;
-                            break;
-                        case 3:
-                            fuelType = eEnergySource.Gas_Soler;
-                            break;
-                    }
+                    fuelTypeToAdd = fuelTypes[choice - 1];
                     break;
                 }
                 else
@@ -333,19 +324,11 @@ public class Commands
                 Console.WriteLine("Not on the menu! please enter a correct menu item.");
                 }
             }
-        }
-        if(i_VehicleType != "Electric")
-        {
+            int amout;
+
             while(true)
             {
-                if(i_VehicleType == "Gas")
-                {
-                    Console.WriteLine("Please enter amount to fuel");
-                }
-                else
-                {
-                    Console.WriteLine("Please enter amount of minutes to charge");
-                }
+                Console.WriteLine("Please enter amount to fuel");
                 string i_UserInput = Console.ReadLine();
                 
                 if(!int.TryParse(i_UserInput, out amout))
@@ -357,22 +340,47 @@ public class Commands
                     break;
                 }
             }
-        }
-        else
+
+        r_Garage.Vehicles[licenseNumber].FillTank(amout, fuelTypeToAdd);
+        Console.WriteLine("Vehicle Fueled!");
+    }
+
+    public void handleCharge()
+    {
+        string licenseNumber;
+
+        Console.Write("Please enter license number: ");
+        while(true)
         {
-            fuelType = eEnergySource.Electric;
+            licenseNumber = Console.ReadLine();
+            if(!r_Garage.ContainsVehicle(licenseNumber))
+            {   
+                Console.WriteLine("Vehicle don't exists in garage registry, please ender a valid license number.");
+            }
+            else
+            {
+                break;
+            }
         }
 
-        r_Garage.Vehicles[licenseNumber].FillTank(amout, fuelType);
+        int amout;
 
-        if(i_VehicleType == "Electric")
+        while(true)
         {
-            Console.WriteLine("Vehicle Charged!");
+            Console.WriteLine("Please enter minutes to charge");
+            string i_UserInput = Console.ReadLine();
+                    
+            if(!int.TryParse(i_UserInput, out amout))
+            {
+                throw new FormatException();
+            }
+            else
+            {
+                break;
+            }
         }
-        else
-        {
-            Console.WriteLine("Vehicle Fueled!");
-        }
-        
+
+        r_Garage.Vehicles[licenseNumber].FillTank(amout, eEnergySource.Electric);
+        Console.WriteLine("Vehicle Charged!");
     }
 }

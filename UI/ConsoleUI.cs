@@ -59,10 +59,10 @@ public class ConsoleUI
                 r_Commands.InflateToMax();
                 break;
             case 5:
-                r_Commands.handleFuelOrCharge("Gas");
+                r_Commands.handleFuel();
                 break;
             case 6:
-                r_Commands.handleFuelOrCharge("Electric");
+                r_Commands.handleCharge();
                 break;
             case 7:
                 break;
