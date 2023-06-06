@@ -1,10 +1,13 @@
 public class VehicleFactory
 {
-    private static List<string> s_VehicleTypes = new List<string>{"Car", "Electric Car", "Motorcycle", "Electric Motorcycle", "Truck"};
 
-    public static List<string> VehicleTypes
+    public enum eVehicleType
     {
-        get { return s_VehicleTypes; }
+        Car,
+        ElectricCar,
+        Motorcycle,
+        ElectricMotorcycle,
+        Truck
     }
 
     public static Vehicle makeVehicle(string i_LicenseNumber, string i_VehicleType)

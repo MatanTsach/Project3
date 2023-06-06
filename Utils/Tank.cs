@@ -25,8 +25,13 @@ public class Tank
         get { return r_EnergySource; }
     }
 
-    public void Fill(float i_Amount)
+    public void Fill(float i_Amount, eEnergySource i_energySource)
     {
+        if (i_energySource != r_EnergySource)
+        {
+            throw new ArgumentException("Incorrect energy type.");
+        }
+
         if ((m_CurrentCapacity + i_Amount) <= r_MaxCapacity)
         {
             m_CurrentCapacity += i_Amount;

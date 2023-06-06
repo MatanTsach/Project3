@@ -5,6 +5,7 @@
     protected float m_EnergyPercentage;
     protected List<Wheel> r_Wheels; 
     protected int m_AmountOfWheels;
+    protected int m_MaxAirPressure;
     protected Tank r_Tank;
     protected Dictionary<string, string> m_VehicleProperties;
 
@@ -41,16 +42,21 @@
         set { r_Wheels = value; }
     }
 
+    public Tank Tank
+    {
+        get { return r_Tank; }
+    }
+
     public Dictionary<string, string> VehicleProperties
     {
         get { return m_VehicleProperties; }
     }
 
-    protected void CreateWheels(float i_MaxAirPressure)
+    protected void CreateWheels()
     {
         for (int i = 0; i < m_AmountOfWheels; i++)
         {
-            r_Wheels.Add(new Wheel(i_MaxAirPressure));
+            r_Wheels.Add(new Wheel(m_MaxAirPressure));
         }
     }
 
@@ -66,16 +72,5 @@
     {
         r_Wheels.ElementAt(i_WheelIndex).ManufacturerName = i_ManufacturerName;
         r_Wheels.ElementAt(i_WheelIndex).Inflate(i_AirPressure);
-    }
-
-    public void FillTank(float i_Amount, eEnergySource i_EnergySource)
-    {
-        if (!(i_EnergySource == r_Tank.EnergySource))
-        {
-            throw new ArgumentException("Incorrect gas type.");
-        }
-
-        r_Tank.Fill(i_Amount);
-        m_EnergyPercentage = r_Tank.CurrentCapacity / r_Tank.MaxCapacity;
     }
 }

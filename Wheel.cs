@@ -30,8 +30,11 @@ public class Wheel
     {
         if ((m_AirPressure + i_AirToAdd) > m_MaxAirPressure)
         {
-            throw new ValueOutOfRangeException($"Cannot inflate about {m_MaxAirPressure}");
+            throw new ValueOutOfRangeException($"Cannot inflate higher than {m_MaxAirPressure}");
         }
-        m_AirPressure += m_MaxAirPressure;
+        else
+        {
+            m_AirPressure += m_MaxAirPressure;
+        }
     }
 }

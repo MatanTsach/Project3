@@ -13,7 +13,7 @@ public class ConsoleUI
     private void showMenu()
     {
         StringBuilder sb = new StringBuilder();
-        sb.Append("\n\n------- MENU -------\n");
+        sb.Append("\n------- MENU -------\n");
         sb.Append("1. Add a new vehicle\n");
         sb.Append("2. Display vehicles in the garage\n");
         sb.Append("3. Change vehicle status\n");
@@ -26,12 +26,21 @@ public class ConsoleUI
     }
     public void Start()
     {
+        Console.WriteLine("Welcome to Matan and Dolev's Garage");
+        
         while (true)
         {
-            showMenu();
-            Console.Write("Please write your desired menu item: ");
-            string userInput = Console.ReadLine();
-            handleInput(userInput);
+            try
+            {
+                showMenu();
+                Console.Write("Please write your desired menu item: ");
+                string userInput = Console.ReadLine();
+                handleInput(userInput);
+            }
+            catch(FormatException e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
     }
 
@@ -39,9 +48,10 @@ public class ConsoleUI
     {
         int choice;
 
+        
         if(!int.TryParse(i_UserInput, out choice))
         {
-            throw new FormatException();
+            throw new FormatException("Please enter a valid menu index.");
         }
         
         switch (choice)
@@ -59,10 +69,10 @@ public class ConsoleUI
                 r_Commands.InflateToMax();
                 break;
             case 5:
-                r_Commands.handleFuel();
+                r_Commands.FuelVehicle(false);
                 break;
             case 6:
-                r_Commands.handleCharge();
+                r_Commands.FuelVehicle(true);
                 break;
             case 7:
                 break;
